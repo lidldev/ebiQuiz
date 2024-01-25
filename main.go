@@ -11,12 +11,11 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func MainPageUI(label *canvas.Text, line *canvas.Rectangle, button *widget.Button) *fyne.Container {
-	return container.New(layout.NewVBoxLayout(),
-		container.NewVBox(label),
-		container.NewStack(button),
-		layout.NewSpacer(),
-		container.NewVBox(line),
+func MainPageUI(label *canvas.Text, button *widget.Button, line *canvas.Line) *fyne.Container {
+	return container.New(layout.NewBorderLayout(label, line, nil, nil),
+		label,
+		container.NewVBox(button),
+		line,
 	)
 }
 
@@ -31,11 +30,17 @@ func main() {
 	text.Alignment = fyne.TextAlignCenter
 	text.TextStyle = fyne.TextStyle{Italic: false, Bold: true, Monospace: false}
 
-	rect := canvas.NewRectangle(color.NRGBA{255, 115, 22, 255})
+	line := canvas.NewLine(color.NRGBA{255, 115, 22, 255})
 
-	w.SetContent(MainPageUI(text, rect, widget.NewButton("Start Quiz!", func() {
+	if !w.FullScreen() {
+		line.StrokeWidth = 750
+	} else {
+		line.StrokeWidth = 1000
+	}
 
-	})))
+	w.SetContent(MainPageUI(text, widget.NewButton("Start Quiz!", func() {
+
+	}), line))
 
 	w.Show()
 	a.Run()
