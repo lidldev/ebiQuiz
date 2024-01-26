@@ -7,16 +7,29 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
-func MainPageUI(label *canvas.Text, button *widget.Button, line *canvas.Line) *fyne.Container {
-	return container.New(layout.NewBorderLayout(label, line, nil, nil),
+func makeUI(tabs *container.AppTabs) *fyne.Container {
+	return container.New(layout.NewGridLayout(1),
+		tabs)
+}
+
+func SettingsUI() *fyne.Container {
+	return container.New(layout.NewGridLayout(1),
+		widget.NewLabel("Settings Page"))
+}
+
+func MainPageUI(label *canvas.Text, image *canvas.Image, button *widget.Button) *fyne.Container {
+	return container.New(layout.NewBorderLayout(label, button, nil, nil),
 		label,
-		container.NewVBox(button),
-		line,
+		image,
+		button,
 	)
+
 }
 
 func main() {
@@ -33,14 +46,23 @@ func main() {
 	line := canvas.NewLine(color.NRGBA{255, 115, 22, 255})
 
 	if !w.FullScreen() {
-		line.StrokeWidth = 750
+		line.StrokeWidth = 300
 	} else {
 		line.StrokeWidth = 1000
 	}
 
-	w.SetContent(MainPageUI(text, widget.NewButton("Start Quiz!", func() {
+	ebiten := canvas.NewImageFromFile("ebiten.png")
+	ebiten.FillMode = canvas.ImageFillContain
 
-	}), line))
+	tabs := container.NewAppTabs(
+		container.NewTabItemWithIcon("Home Page", theme.HomeIcon(), MainPageUI(text, ebiten, widget.NewButton("Start Quiz!", func() {
+			dialog.ShowConfirm("Start Quiz", "Are You Ready?", func(b bool) {}, w)
+		}))),
+		container.NewTabItemWithIcon("Settings", theme.SettingsIcon(), SettingsUI()),
+	)
+	tabs.SetTabLocation(container.TabLocationLeading)
+
+	w.SetContent(makeUI(tabs))
 
 	w.Show()
 	a.Run()
