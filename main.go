@@ -54,12 +54,19 @@ func main() {
 	ebiten := canvas.NewImageFromFile("ebiten.png")
 	ebiten.FillMode = canvas.ImageFillContain
 
+	button := widget.NewButton("Start Quiz!", func() {
+		dialog.ShowConfirm("Start Quiz", "Are You Ready?", func(b bool) {}, w)
+
+	})
+
+	button.Importance = widget.WarningImportance
+
 	tabs := container.NewAppTabs(
-		container.NewTabItemWithIcon("Home Page", theme.HomeIcon(), MainPageUI(text, ebiten, widget.NewButton("Start Quiz!", func() {
-			dialog.ShowConfirm("Start Quiz", "Are You Ready?", func(b bool) {}, w)
-		}))),
+		container.NewTabItemWithIcon("Home Page", theme.HomeIcon(), MainPageUI(text, ebiten, button)),
 		container.NewTabItemWithIcon("Settings", theme.SettingsIcon(), SettingsUI()),
 	)
+
+	tabs.Items[0].Icon = theme.HomeIcon()
 	tabs.SetTabLocation(container.TabLocationLeading)
 
 	w.SetContent(makeUI(tabs))
