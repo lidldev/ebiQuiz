@@ -51,7 +51,7 @@ func main() {
 		line.StrokeWidth = 1000
 	}
 
-	ebiten := canvas.NewImageFromFile("ebiten.png")
+	ebiten := canvas.NewImageFromFile("https://github.com/lidldev/ebiQuiz/blob/54f559ea24b98b3799b5f385fd3bb477710d9dc5/ebiten.png")
 	ebiten.FillMode = canvas.ImageFillContain
 
 	button := widget.NewButton("Start Quiz!", func() {
