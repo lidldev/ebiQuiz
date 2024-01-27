@@ -11,6 +11,7 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	"github.com/lidldev/ebiQuiz/resource"
 )
 
 func makeUI(tabs *container.AppTabs) *fyne.Container {
@@ -51,12 +52,11 @@ func main() {
 		line.StrokeWidth = 1000
 	}
 
-	ebiten := canvas.NewImageFromFile("resource/ebiten.png")
+	ebiten := resource.Ebiten
 	ebiten.FillMode = canvas.ImageFillContain
 
 	button := widget.NewButton("Start Quiz!", func() {
 		dialog.ShowConfirm("Start Quiz", "Are You Ready?", func(b bool) {}, w)
-
 	})
 
 	button.Importance = widget.WarningImportance
